@@ -11,4 +11,6 @@ nfa.add_transition("q0", "a", {"q0", "q1"})
 nfa.add_transition("q1", "b", {"q2"})
 nfa.add_transition("q0", None, {"q2"})  # Epsilon transition
 
+print(nfa.validate_string('aab'))
+
 nfa.plot()
