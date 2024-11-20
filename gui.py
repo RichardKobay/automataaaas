@@ -137,9 +137,11 @@ class NFA_GUI(QMainWindow):
         symbol, ok2 = QInputDialog.getText(self, "Añadir Transición", "Ingrese el símbolo (o deje vacío para ε):")
         if not ok2:
             symbol = None  # Si no se ingresa símbolo, se considera ε (epsilon)
+        elif symbol == "":
+            symbol = None  # Si el símbolo es una cadena vacía, lo tratamos como ε
 
-        # Validar el símbolo
-        if symbol not in self.alphabet and symbol is not None:
+        # Validar el símbolo solo si no es None
+        if symbol is not None and symbol not in self.alphabet:
             QMessageBox.critical(self, "Error", f"El símbolo '{symbol}' no está en el alfabeto.")
             return  # Salir si el símbolo no es válido
 
@@ -155,8 +157,8 @@ class NFA_GUI(QMainWindow):
             QMessageBox.critical(self, "Error", "Uno o más estados siguientes no existen.")
             return  # Salir si algún estado siguiente no es válido
 
-        # Agregar la transición al NFA
-        self.nfa.add_transition(current_state, symbol if symbol else None, next_states)
+        # Agregar la transición al NFA (considerando que el símbolo puede ser None o un símbolo del alfabeto)
+        self.nfa.add_transition(current_state, symbol, next_states)
         
         # Mostrar mensaje de éxito
         QMessageBox.information(self, "Transición Añadida", f"Transición añadida: {current_state} --{symbol if symbol else 'ε'}--> {', '.join(next_states)}")
